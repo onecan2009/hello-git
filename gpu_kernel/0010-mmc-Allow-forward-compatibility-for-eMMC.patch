@@ -1,0 +1,30 @@
+From 2be5a726a02078c937ce94ad0c9c070860d19387 Mon Sep 17 00:00:00 2001
+From: cjp <service@t-firefly.com>
+Date: Fri, 4 Nov 2016 11:50:41 +0800
+Subject: [PATCH 10/11] mmc: Allow forward compatibility for eMMC
+
+---
+ drivers/mmc/core/mmc.c |    7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/drivers/mmc/core/mmc.c b/drivers/mmc/core/mmc.c
+index e67293b..a9d09bd 100755
+--- a/drivers/mmc/core/mmc.c
++++ b/drivers/mmc/core/mmc.c
+@@ -294,12 +294,7 @@ static int mmc_read_ext_csd(struct mmc_card *card, u8 *ext_csd)
+ 	}
+ 
+ 	card->ext_csd.rev = ext_csd[EXT_CSD_REV];
+-	if (card->ext_csd.rev > 7) {
+-		pr_err("%s: unrecognised EXT_CSD revision %d\n",
+-			mmc_hostname(card->host), card->ext_csd.rev);
+-		err = -EINVAL;
+-		goto out;
+-	}
++
+ 
+ 	card->ext_csd.raw_sectors[0] = ext_csd[EXT_CSD_SEC_CNT + 0];
+ 	card->ext_csd.raw_sectors[1] = ext_csd[EXT_CSD_SEC_CNT + 1];
+-- 
+1.7.9.5
+

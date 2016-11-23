@@ -1,0 +1,58 @@
+From a80acf62b148e82cd534d762c82f48716559f7e1 Mon Sep 17 00:00:00 2001
+From: huang zhibao <hzb@rock-chips.com>
+Date: Thu, 25 Aug 2016 15:14:02 +0800
+Subject: [PATCH 03/11] arm: rockchip: rk3288w: set rockchip_soc_id at runtime
+
+By reading the HDMI Revision ID register.
+---
+ arch/arm/mach-rockchip/rk3288.c |    7 +++++++
+ include/linux/rockchip/iomap.h  |    3 ++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/mach-rockchip/rk3288.c b/arch/arm/mach-rockchip/rk3288.c
+index 6165538..d55c264 100755
+--- a/arch/arm/mach-rockchip/rk3288.c
++++ b/arch/arm/mach-rockchip/rk3288.c
+@@ -52,6 +52,7 @@
+ 	RK_DEVICE(RK3288_SERVICE_##name##_VIRT, RK3288_SERVICE_##name##_PHYS, RK3288_SERVICE_##name##_SIZE)
+ 
+ #define RK3288_IMEM_VIRT (RK_BOOTRAM_VIRT + SZ_32K)
++#define RK3288_HDMI_VIRT (RK3288_IMEM_VIRT + SZ_4K)
+ #define RK3288_TIMER7_VIRT (RK_TIMER_VIRT + 0x20)
+ 
+ static struct map_desc rk3288_io_desc[] __initdata = {
+@@ -87,6 +88,7 @@ static struct map_desc rk3288_io_desc[] __initdata = {
+ 	RK_DEVICE(RK_GIC_VIRT + RK3288_GIC_DIST_SIZE, RK3288_GIC_CPU_PHYS, RK3288_GIC_CPU_SIZE),
+ 	RK_DEVICE(RK_BOOTRAM_VIRT, RK3288_BOOTRAM_PHYS, RK3288_BOOTRAM_SIZE),
+ 	RK_DEVICE(RK3288_IMEM_VIRT, RK3288_IMEM_PHYS, SZ_4K),
++	RK_DEVICE(RK3288_HDMI_VIRT, RK3288_HDMI_PHYS, SZ_4K),
+ 	RK_DEVICE(RK_TIMER_VIRT, RK3288_TIMER6_PHYS, RK3288_TIMER_SIZE),
+ };
+ 
+@@ -132,6 +134,11 @@ static void __init rk3288_dt_map_io(void)
+ 	rockchip_soc_id = ROCKCHIP_SOC_RK3288;
+ 
+ 	iotable_init(rk3288_io_desc, ARRAY_SIZE(rk3288_io_desc));
++
++	/* RK3288W HDMI Revision ID is 0x1A */
++	if (readl_relaxed(RK3288_HDMI_VIRT + 4) == 0x1A)
++		rockchip_soc_id = ROCKCHIP_SOC_RK3288W;
++
+ 	debug_ll_io_init();
+ 	usb_uart_init();
+ 
+diff --git a/include/linux/rockchip/iomap.h b/include/linux/rockchip/iomap.h
+index ae4e1fd..cdf9531 100755
+--- a/include/linux/rockchip/iomap.h
++++ b/include/linux/rockchip/iomap.h
+@@ -112,5 +112,6 @@
+ #define RK3288_BOOTRAM_SIZE             SZ_4K
+ #define RK3288_IMEM_PHYS                0xFF700000
+ #define RK3288_IMEM_SZIE                0x00018000
+-
++#define RK3288_HDMI_PHYS                0xFF980000
++#define RK3288_HDMI_SIZE                SZ_128K
+ #endif
+-- 
+1.7.9.5
+

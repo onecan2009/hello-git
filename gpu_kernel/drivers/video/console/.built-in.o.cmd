@@ -1,0 +1,1 @@
+cmd_drivers/video/console/built-in.o :=  /home/rk3288-sdk/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-ld -EL    -r -o drivers/video/console/built-in.o drivers/video/console/dummycon.o ; scripts/mod/modpost drivers/video/console/built-in.o

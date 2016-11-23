@@ -1,0 +1,1 @@
+cmd_drivers/net/phy/built-in.o :=  /home/rk3288-sdk/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-ld -EL    -r -o drivers/net/phy/built-in.o drivers/net/phy/libphy.o ; scripts/mod/modpost drivers/net/phy/built-in.o

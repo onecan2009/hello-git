@@ -1,0 +1,1 @@
+cmd_drivers/power/built-in.o :=  /home/rk3288-sdk/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-ld -EL    -r -o drivers/power/built-in.o drivers/power/power_supply.o drivers/power/test_power.o ; scripts/mod/modpost drivers/power/built-in.o

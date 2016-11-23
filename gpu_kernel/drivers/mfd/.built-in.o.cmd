@@ -1,0 +1,1 @@
+cmd_drivers/mfd/built-in.o :=  /home/rk3288-sdk/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-ld -EL    -r -o drivers/mfd/built-in.o drivers/mfd/mfd-core.o drivers/mfd/rk808.o drivers/mfd/rk808-irq.o drivers/mfd/ricoh619.o drivers/mfd/ricoh619-irq.o ; scripts/mod/modpost drivers/mfd/built-in.o

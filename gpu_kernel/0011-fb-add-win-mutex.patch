@@ -1,0 +1,24 @@
+From ce80c328e28bd5be46cf3882aaaed4367a428c3c Mon Sep 17 00:00:00 2001
+From: cjp <service@t-firefly.com>
+Date: Fri, 18 Nov 2016 16:51:44 +0800
+Subject: [PATCH 11/11] fb: add win mutex
+
+---
+ include/linux/rk_fb.h |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/linux/rk_fb.h b/include/linux/rk_fb.h
+index 24e6528..b7ad48b 100755
+--- a/include/linux/rk_fb.h
++++ b/include/linux/rk_fb.h
+@@ -549,6 +549,7 @@ struct rk_lcdc_driver {
+ 	int iommu_enabled;
+ 	struct rk_fb_reg_area_data reg_area_data;
+ 	struct mutex fb_win_id_mutex;
++	struct mutex win_config;
+ 
+ 	struct completion frame_done;	//sync for pan_display,whe we set a new frame address to lcdc register,we must make sure the frame begain to display
+ 	spinlock_t cpl_lock;	//lock for completion  frame done
+-- 
+1.7.9.5
+

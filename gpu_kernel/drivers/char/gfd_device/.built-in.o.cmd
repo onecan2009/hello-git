@@ -1,0 +1,1 @@
+cmd_drivers/char/gfd_device/built-in.o :=  /home/rk3288-sdk/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-ld -EL    -r -o drivers/char/gfd_device/built-in.o drivers/char/gfd_device/ups.o ; scripts/mod/modpost drivers/char/gfd_device/built-in.o

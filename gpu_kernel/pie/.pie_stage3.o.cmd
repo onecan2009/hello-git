@@ -1,0 +1,1 @@
+cmd_pie/pie_stage3.o := /home/rk3288-sdk/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-objcopy  -j ".pie.*" -j ".pie.text" -j ".pie.rk3188.text" -j ".pie.rk3188.data" -j ".pie.rk3288.text" -j ".pie.rk3288.data" pie/pie_stage2.o pie/pie_stage3.o

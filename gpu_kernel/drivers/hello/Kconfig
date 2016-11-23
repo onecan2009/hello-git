@@ -1,0 +1,20 @@
+#
+# led test  device configuration
+#
+
+menuconfig GFD_HELLO_LED_TEST
+	tristate "gfd hello led test"
+	default y
+	---help---
+	  add by terry 2015-12-14
+
+if GFD_HELLO_LED_TEST
+
+config RK3288_LARK_HELLO
+	tristate "lark hello test"
+	default y
+	---help---
+	  LED test
+
+	  
+endif # hello test

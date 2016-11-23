@@ -1,0 +1,29 @@
+From 8578c08a4fbf60ec85597e90a24a5fc120f5385b Mon Sep 17 00:00:00 2001
+From: huang zhibao <hzb@rock-chips.com>
+Date: Wed, 14 Sep 2016 09:29:30 +0800
+Subject: [PATCH 08/11] ARM: rockchip: dvfs: add soc check for pvtm
+
+As rk3288w don't support pvtm at present, and it has the same eco vesion
+and compatible with rk3288, so add a soc check.
+---
+ arch/arm/mach-rockchip/dvfs.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/mach-rockchip/dvfs.c b/arch/arm/mach-rockchip/dvfs.c
+index ffe2148..4a408fe 100755
+--- a/arch/arm/mach-rockchip/dvfs.c
++++ b/arch/arm/mach-rockchip/dvfs.c
+@@ -1922,7 +1922,9 @@ static int dvfs_node_parse_dt(struct device_node *np,
+ 
+ 		for (i = 0; i < ARRAY_SIZE(pvtm_info_table); i++) {
+ 			struct pvtm_info *pvtm_info = pvtm_info_table[i];
+-
++			
++			if (soc_is_rk3288w())
++				return;
+ 			if ((pvtm_info->channel == dvfs_node->channel) &&
+ 			    (pvtm_info->process_version == process_version) &&
+ 			     of_machine_is_compatible(pvtm_info->compatible)) {
+-- 
+1.7.9.5
+

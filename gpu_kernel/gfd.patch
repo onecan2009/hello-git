@@ -1,0 +1,128 @@
+diff --git a/arch/arm/configs/firefly-rk3288-linux_defconfig b/arch/arm/configs/firefly-rk3288-linux_defconfig
+index 810a975..929df43 100644
+--- a/arch/arm/configs/firefly-rk3288-linux_defconfig
++++ b/arch/arm/configs/firefly-rk3288-linux_defconfig
+@@ -360,14 +360,11 @@ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+ # CONFIG_BACKLIGHT_GENERIC is not set
+ CONFIG_BACKLIGHT_PWM=y
+ CONFIG_FB_ROCKCHIP=y
+-CONFIG_LCDC_RK3188=y
+ CONFIG_LCDC_RK3288=y
+ CONFIG_RK_TRSM=y
+ CONFIG_RK32_LVDS=y
+ CONFIG_DP_ANX6345=y
+ CONFIG_RK32_DP=y
+-CONFIG_RK_HDMI=y
+-CONFIG_HDMI_RK3288=y
+ CONFIG_ROCKCHIP_RGA2=y
+ CONFIG_FIREFLY_VGA=y
+ CONFIG_FIREFLY_VGA_OUT_ONLY=y
+@@ -379,14 +376,12 @@ CONFIG_LOGO=y
+ CONFIG_SOUND=y
+ CONFIG_SND=y
+ # CONFIG_SND_SUPPORT_OLD_API is not set
+-CONFIG_SND_VERBOSE_PRINTK=y
++# CONFIG_SND_VERBOSE_PROCFS is not set
+ # CONFIG_SND_DRIVERS is not set
+ # CONFIG_SND_ARM is not set
+ # CONFIG_SND_SPI is not set
+-CONFIG_SND_USB_AUDIO=y
++# CONFIG_SND_USB is not set
+ CONFIG_SND_SOC=y
+-CONFIG_SND_RK_SOC=y
+-CONFIG_SND_RK_SOC_ES8323=y
+ CONFIG_HID_BATTERY_STRENGTH=y
+ CONFIG_HIDRAW=y
+ CONFIG_UHID=y
+@@ -457,25 +452,7 @@ CONFIG_USB_HIDDEV=y
+ CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+ CONFIG_USB_EHCI_HCD=y
+ CONFIG_USB_EHCI_RK=y
+-CONFIG_USB_ACM=y
+-CONFIG_USB_PRINTER=y
+ CONFIG_USB_STORAGE=y
+-CONFIG_USB_STORAGE_DATAFAB=y
+-CONFIG_USB_STORAGE_FREECOM=y
+-CONFIG_USB_STORAGE_ISD200=y
+-CONFIG_USB_STORAGE_USBAT=y
+-CONFIG_USB_STORAGE_SDDR09=y
+-CONFIG_USB_STORAGE_SDDR55=y
+-CONFIG_USB_STORAGE_JUMPSHOT=y
+-CONFIG_USB_STORAGE_ALAUDA=y
+-CONFIG_USB_STORAGE_ONETOUCH=y
+-CONFIG_USB_STORAGE_KARMA=y
+-CONFIG_USB_STORAGE_CYPRESS_ATACB=y
+-CONFIG_USB_STORAGE_ENE_UB6250=y
+-CONFIG_USB_SERIAL=y
+-CONFIG_USB_SERIAL_GENERIC=y
+-CONFIG_USB_SERIAL_OPTION=y
+-CONFIG_USB_TRANCEVIBRATOR=y
+ CONFIG_USB_OTG_WAKELOCK=y
+ CONFIG_USB_GADGET=y
+ CONFIG_USB_GADGET_DEBUG_FILES=y
+diff --git a/drivers/video/rockchip/Makefile b/drivers/video/rockchip/Makefile
+index 1d8effa..c3fb7bd 100755
+--- a/drivers/video/rockchip/Makefile
++++ b/drivers/video/rockchip/Makefile
+@@ -1,11 +1,11 @@
+-obj-$(CONFIG_FB_ROCKCHIP) += rk_fb_box.o rkfb_sysfs.o screen/ 
++obj-$(CONFIG_FB_ROCKCHIP) += display-sys.o rk_fb_box.o rkfb_sysfs.o screen/ 
+ obj-$(CONFIG_DRM_ROCKCHIP)  += rk_drm_fb.o screen/
+ obj-$(CONFIG_RK_TRSM) += transmitter/
+ obj-$(CONFIG_DRM_ROCKCHIP)  += lcdc/
+ obj-$(CONFIG_FB_ROCKCHIP) += lcdc/
+ obj-$(CONFIG_ROCKCHIP_RGA) += rga/
+ obj-$(CONFIG_ROCKCHIP_RGA2) += rga2/
+-obj-$(CONFIG_RK_HDMI) += display-sys.o hdmi/
++obj-$(CONFIG_RK_HDMI) += hdmi/
+ obj-$(CONFIG_IEP) += iep/
+ obj-$(CONFIG_RK_TVENCODER) += tve/
+ obj-$(CONFIG_FIREFLY_VGA) += vga/
+diff --git a/drivers/video/rockchip/vga/firefly_vga.c b/drivers/video/rockchip/vga/firefly_vga.c
+index 6dfc0d3..a043def 100644
+--- a/drivers/video/rockchip/vga/firefly_vga.c
++++ b/drivers/video/rockchip/vga/firefly_vga.c
+@@ -327,7 +327,10 @@ int vga_switch_default_screen(void)
+ 
+ EXPORT_SYMBOL(vga_switch_default_screen);
+ 
+-
++static ssize_t vga_print_name(struct switch_dev* sdev, char* buf)
++{
++    return sprintf(buf, "vga\n");
++}
+ 
+ static int firefly_fb_event_notify(struct notifier_block *self, unsigned long action, void *data)
+ {
+@@ -454,6 +457,7 @@ static void vga_work_queue(struct work_struct *work)
+                     firefly_vga_set_mode(NULL, &default_modedb[modeNum - 1]);
+                     firefly_vga_enable();
+                     ddev->set_mode = 0;
++                    ddev->ddc_timer_start = 0;
+                 }
+             } else if(ddev->ddc_check_ok == 1) {
+                 if(vga_ddc_is_ok() == 0 || vga->enable != 1) {
+@@ -642,6 +646,12 @@ static int  vga_edid_probe(struct i2c_client *client, const struct i2c_device_id
+     memset(&vga_monspecs, 0, sizeof(struct sda7123_monspecs));
+     
+     ddev->vga = &vga_monspecs;
++
++	#ifdef CONFIG_SWITCH
++	ddev->switchdev.name="vga";
++    ddev->switchdev.print_name = vga_print_name;
++	switch_dev_register(&(ddev->switchdev));
++	#endif
+     
+     mutex_init(&ddev->vga->lock);
+     
+@@ -658,10 +668,6 @@ static int  vga_edid_probe(struct i2c_client *client, const struct i2c_device_id
+ 	
+ 	fb_register_client(&firefly_fb_notifier);
+ 	
+-	#ifdef CONFIG_SWITCH
+-	ddev->switchdev.name="vga";
+-	switch_dev_register(&(ddev->switchdev));
+-	#endif
+ 	
+ 	vga_submit_work(ddev->vga, VGA_TIMER_DELAY, 8000, NULL);
+

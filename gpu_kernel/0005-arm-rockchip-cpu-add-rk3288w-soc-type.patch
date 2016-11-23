@@ -1,0 +1,45 @@
+From 8f05da5fab719fe8d9926fea5398472d99e8b1ae Mon Sep 17 00:00:00 2001
+From: huang zhibao <hzb@rock-chips.com>
+Date: Thu, 25 Aug 2016 15:27:40 +0800
+Subject: [PATCH 05/11] arm: rockchip: cpu: add rk3288w soc type
+
+---
+ arch/arm/mach-rockchip/cpu.c |    2 ++
+ include/linux/rockchip/cpu.h |    3 ++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/mach-rockchip/cpu.c b/arch/arm/mach-rockchip/cpu.c
+index 2a2f668..bce05aa 100644
+--- a/arch/arm/mach-rockchip/cpu.c
++++ b/arch/arm/mach-rockchip/cpu.c
+@@ -38,6 +38,8 @@ static ssize_t soc_show(struct device *dev, struct device_attribute *attr, char
+ 
+ 	if (soc_is_rk3288())
+ 		soc = "rk3288";
++	else if (soc_is_rk3288w())
++		soc = "rk3288w";
+ 	else if (soc_is_rk3190())
+ 		soc = "rk3190";
+ 	else if (soc_is_rk3188plus())
+diff --git a/include/linux/rockchip/cpu.h b/include/linux/rockchip/cpu.h
+index 1c7966a..c1c5a81 100644
+--- a/include/linux/rockchip/cpu.h
++++ b/include/linux/rockchip/cpu.h
+@@ -70,6 +70,7 @@ ROCKCHIP_CPU(3288, 3288)
+ #define ROCKCHIP_SOC_RK3188PLUS (ROCKCHIP_CPU_RK3188 | 0x10)
+ #define ROCKCHIP_SOC_RK3190     (ROCKCHIP_CPU_RK319X | 0x00)
+ #define ROCKCHIP_SOC_RK3288     (ROCKCHIP_CPU_RK3288 | 0x00)
++#define ROCKCHIP_SOC_RK3288W    (ROCKCHIP_CPU_RK3288 | 0x01)
+ 
+ #define ROCKCHIP_SOC(id, ID) \
+ static inline bool soc_is_rk##id(void) \
+@@ -95,5 +96,5 @@ ROCKCHIP_SOC(3188, 3188)
+ ROCKCHIP_SOC(3188plus, 3188PLUS)
+ ROCKCHIP_SOC(3190, 3190)
+ ROCKCHIP_SOC(3288, 3288)
+-
++ROCKCHIP_SOC(3288w, 3288W)
+ #endif
+-- 
+1.7.9.5
+

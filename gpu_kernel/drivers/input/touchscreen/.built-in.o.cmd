@@ -1,0 +1,1 @@
+cmd_drivers/input/touchscreen/built-in.o :=  /home/rk3288-sdk/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-ld -EL    -r -o drivers/input/touchscreen/built-in.o drivers/input/touchscreen/rk29_i2c_goodix.o drivers/input/touchscreen/vtl_ts/built-in.o ; scripts/mod/modpost drivers/input/touchscreen/built-in.o

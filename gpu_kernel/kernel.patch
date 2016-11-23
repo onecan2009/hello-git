@@ -1,0 +1,46 @@
+diff --git a/arch/arm/boot/dts/firefly-rk3288_gufudao.dts b/arch/arm/boot/dts/firefly-rk3288_gufudao.dts
+index 8b2119a..97c9287 100755
+--- a/arch/arm/boot/dts/firefly-rk3288_gufudao.dts
++++ b/arch/arm/boot/dts/firefly-rk3288_gufudao.dts
+@@ -553,6 +553,7 @@
+ 
+ &fb {
+ 	rockchip,disp-mode = <DUAL>;
++	rockchip,uboot-logo-on= <1>;
+ };
+ 
+ &rk_screen {
+@@ -563,6 +564,13 @@
+ &lcdc0 {
+ 	status = "okay";
+ 	rockchip,prop = <PRMRY>;
++    power_ctr: power_ctr {
++        lcd_en:lcd_en {
++                rockchip,power_type = <GPIO>;
++                gpios = <&gpio0 GPIO_C1 GPIO_ACTIVE_HIGH>;
++                rockchip,delay = <10>;
++        };
++    };
+ };
+ 
+ &lcdc1 {
+diff --git a/drivers/video/rockchip/rk_fb_box.c b/drivers/video/rockchip/rk_fb_box.c
+index fdd26cf..cbe1da8 100755
+--- a/drivers/video/rockchip/rk_fb_box.c
++++ b/drivers/video/rockchip/rk_fb_box.c
+@@ -66,6 +66,7 @@ static struct rk_fb_trsm_ops *trsm_mipi_ops;
+ static int uboot_logo_on;
+ int support_uboot_display(void)
+ {
++    return 0;
+ 	return uboot_logo_on;
+ }
+ 
+@@ -232,6 +233,7 @@ int rk_disp_pwr_ctr_parse_dt(struct rk_lcdc_driver *dev_drv)
+ 			dev_drv->id);
+ 		return -ENODEV;
+ 	}
++    return -ENODEV;
+ 
+ 	for_each_child_of_node(root, child) {
+ 		pwr_ctr = kmalloc(sizeof(struct rk_disp_pwr_ctr_list),

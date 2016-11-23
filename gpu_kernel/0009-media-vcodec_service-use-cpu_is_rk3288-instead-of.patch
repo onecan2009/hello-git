@@ -1,0 +1,43 @@
+From 1d3f29d1fd6ae58462e091c72ac27bbe93b544ea Mon Sep 17 00:00:00 2001
+From: cjp <service@t-firefly.com>
+Date: Fri, 18 Nov 2016 10:11:43 +0800
+Subject: [PATCH 09/11] media: vcodec_service: use cpu_is_rk3288 instead of
+
+---
+ arch/arm/mach-rockchip/vcodec_service.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/mach-rockchip/vcodec_service.c b/arch/arm/mach-rockchip/vcodec_service.c
+index 9119a76..0e78820 100755
+--- a/arch/arm/mach-rockchip/vcodec_service.c
++++ b/arch/arm/mach-rockchip/vcodec_service.c
+@@ -2085,7 +2085,7 @@ static void get_hw_info(struct vpu_service_info *pservice)
+ 		dec->refBufSupport  = (configReg >> DWL_REF_BUFF_E) & 0x01U;
+ 		dec->vp6Support     = (configReg >> DWL_VP6_E) & 0x01U;
+ 
+-		if (soc_is_rk3190() || soc_is_rk3288())
++		if (soc_is_rk3190() || cpu_is_rk3288())
+ 			dec->maxDecPicWidth = 4096;
+ 		else if (cpu_is_rk3036() || cpu_is_rk312x())
+ 			dec->maxDecPicWidth = 1920;
+@@ -2121,7 +2121,7 @@ static void get_hw_info(struct vpu_service_info *pservice)
+ 			dec->refBufSupport |= 8; /* enable HW support for offset */
+ 
+ 		/// invalidate fuse register value in rk319x vpu and following.
+-		if (!soc_is_rk3190() && !soc_is_rk3288() && !cpu_is_rk3036() && !cpu_is_rk312x()) {
++		if (!soc_is_rk3190() && !cpu_is_rk3288() && !cpu_is_rk3036() && !cpu_is_rk312x()) {
+ 			VPUHwFuseStatus_t hwFuseSts;
+ 			/* Decoder fuse configuration */
+ 			u32 fuseReg = pservice->dec_dev.hwregs[VPU_DEC_HW_FUSE_CFG];
+@@ -2253,7 +2253,7 @@ static void get_hw_info(struct vpu_service_info *pservice)
+ 			enc->reserv[0] = enc->reserv[1] = 0;
+ 		}
+ 
+-		pservice->auto_freq = soc_is_rk2928g() || soc_is_rk2928l() || soc_is_rk2926() || soc_is_rk3288();
++		pservice->auto_freq = soc_is_rk2928g() || soc_is_rk2928l() || soc_is_rk2926() || cpu_is_rk3288();
+ 		if (pservice->auto_freq) {
+ 			pr_info("vpu_service set to auto frequency mode\n");
+ 			atomic_set(&pservice->freq_status, VPU_FREQ_BUT);
+-- 
+1.7.9.5
+

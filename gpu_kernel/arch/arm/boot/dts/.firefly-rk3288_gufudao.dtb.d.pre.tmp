@@ -1,0 +1,17 @@
+firefly-rk3288_gufudao.o: arch/arm/boot/dts/firefly-rk3288_gufudao.dts \
+ arch/arm/boot/dts/rk3288.dtsi \
+ /home/rk3288-sdk/gpu_kernel/arch/arm/boot/dts/include/dt-bindings/clock/rk_system_status.h \
+ /home/rk3288-sdk/gpu_kernel/arch/arm/boot/dts/include/dt-bindings/interrupt-controller/arm-gic.h \
+ /home/rk3288-sdk/gpu_kernel/arch/arm/boot/dts/include/dt-bindings/interrupt-controller/irq.h \
+ /home/rk3288-sdk/gpu_kernel/arch/arm/boot/dts/include/dt-bindings/rkfb/rk_fb.h \
+ /home/rk3288-sdk/gpu_kernel/arch/arm/boot/dts/include/dt-bindings/rkmipi/mipi_dsi.h \
+ /home/rk3288-sdk/gpu_kernel/arch/arm/boot/dts/include/dt-bindings/suspend/rockchip-pm.h \
+ /home/rk3288-sdk/gpu_kernel/arch/arm/boot/dts/include/dt-bindings/sensor-dev.h \
+ arch/arm/boot/dts/skeleton.dtsi arch/arm/boot/dts/rk3288-pinctrl.dtsi \
+ /home/rk3288-sdk/gpu_kernel/arch/arm/boot/dts/include/dt-bindings/gpio/gpio.h \
+ /home/rk3288-sdk/gpu_kernel/arch/arm/boot/dts/include/dt-bindings/pinctrl/rockchip.h \
+ /home/rk3288-sdk/gpu_kernel/arch/arm/boot/dts/include/dt-bindings/pinctrl/rockchip-rk3288.h \
+ arch/arm/boot/dts/rk3288-clocks.dtsi \
+ /home/rk3288-sdk/gpu_kernel/arch/arm/boot/dts/include/dt-bindings/clock/rockchip,rk3288.h \
+ /home/rk3288-sdk/gpu_kernel/arch/arm/boot/dts/include/dt-bindings/clock/rockchip.h \
+ arch/arm/boot/dts/lcd-box.dtsi

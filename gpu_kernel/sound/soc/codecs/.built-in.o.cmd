@@ -1,0 +1,1 @@
+cmd_sound/soc/codecs/built-in.o :=  /home/rk3288-sdk/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-ld -EL    -r -o sound/soc/codecs/built-in.o sound/soc/codecs/rt56xx_ioctl.o ; scripts/mod/modpost sound/soc/codecs/built-in.o

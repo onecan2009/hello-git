@@ -1,0 +1,1 @@
+cmd_drivers/video/rockchip/rga2/built-in.o :=  /home/rk3288-sdk/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-ld -EL    -r -o drivers/video/rockchip/rga2/built-in.o drivers/video/rockchip/rga2/rga2.o ; scripts/mod/modpost drivers/video/rockchip/rga2/built-in.o
